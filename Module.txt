@@ -1,0 +1,10 @@
+﻿Name: FileUploadField
+AntiForgery: enabled
+Author: Zeta Tech
+Website: http://zeta.com.au
+Version: 1.0
+OrchardVersion: 1.10
+Description: A file upload field that includes the option of saving in the database
+Features:
+    FileUploadField:
+        Description: A file upload field that includes the option of saving in the database
