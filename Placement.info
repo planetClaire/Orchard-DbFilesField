@@ -1,0 +1,9 @@
+﻿<Placement>
+  <Place Fields_DbFilesField_Edit="Content:5"/>
+  <Place Fields_DbFilesField="Content:2"/>
+
+  <Match DisplayType="SummaryAdmin">
+    <Place Fields_DbFilesField="Content:5"/>
+  </Match>
+
+</Placement>

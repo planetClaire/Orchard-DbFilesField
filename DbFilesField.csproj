@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FileUploadField</RootNamespace>
-    <AssemblyName>FileUploadField</AssemblyName>
+    <RootNamespace>DbFilesField</RootNamespace>
+    <AssemblyName>DbFilesField</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <FileUpgradeFlags>
@@ -47,6 +47,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=1.4.0.0, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\lib\nhibernate\FluentNHibernate.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -80,6 +84,32 @@
       <Project>{9916839C-39FC-4CEB-A5AF-89CA7E87119F}</Project>
       <Name>Orchard.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\BinaryLengthMaxAttribute.cs" />
+    <Compile Include="Controllers\DownloadController.cs" />
+    <Compile Include="Drivers\DbFilesFieldDriver.cs" />
+    <Compile Include="Fields\DBFilesField.cs" />
+    <Compile Include="Migrations.cs" />
+    <Compile Include="Models\FileUploadRecord.cs" />
+    <Compile Include="Settings\DbFilesFieldEditorEvents.cs" />
+    <Compile Include="Settings\DbFilesFieldSettings.cs" />
+    <Compile Include="ViewModels\DbFilesFieldEditViewModel.cs" />
+    <Compile Include="ViewModels\DbFilesFieldViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\EditorTemplates\Fields\DbFilesField.Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Placement.info">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Fields\DbFilesField.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DefinitionTemplates\DbFilesFieldSettings.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

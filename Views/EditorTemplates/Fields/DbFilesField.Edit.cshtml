@@ -1,0 +1,36 @@
+﻿@model DbFilesField.ViewModels.DbFilesFieldEditViewModel
+@{
+    Script.Require("jQuery").AtFoot();
+    var fieldName = string.Format("DbFiles-{0}", Model.Name);
+}
+
+<fieldset>
+
+    <label for='@fieldName' @if (Model.IsRequired) {
+                                <text> class="required" </text>
+                            }>@Model.Name</label>
+    <input type="file" name='@fieldName' @if (Model.IsRequired) {<text> class="required"</text>} @if (Model.AllowMultiple) {<text>multiple</text>}/>
+
+    @*todo - allow delete*@
+    @if (Model.DbFilesViewModel.IdFileUpload != 0) {
+        <h4>Existing attachments</h4>
+        <table class="items">
+            <tr>
+                <td>@Html.ActionLink(Model.DbFilesViewModel.FileName, "Index", new { id = Model.DbFilesViewModel.IdFileUpload, controller = "Download", area = "DbFilesField" }, new { @class = "download-link", target = "_blank" })</td>
+                <td>@Html.ActionLink(T("Delete").ToString(), "Delete", new { id = Model.DbFilesViewModel.IdFileUpload, controller = "Admin", area = "DbFilesField" }, new { itemprop = "RemoveUrl UnsafeUrl" })</td>
+            </tr>
+        </table>
+    }
+
+</fieldset>
+
+@using (Script.Foot())
+{
+    <script type="text/javascript">
+//<![CDATA[
+    $('form')
+		.attr('enctype', 'multipart/form-data')
+		.attr('encoding', 'multipart/form-data');
+//]]>
+    </script>
+}

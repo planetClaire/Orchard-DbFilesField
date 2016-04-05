@@ -1,0 +1,1 @@
+﻿@Html.ActionLink((string)T("Download {0}", Model.ViewModel.FileName).ToString(), "Index", new { id = Model.ViewModel.IdFileUpload, controller = "Download", area = "DbFilesField" }, new { @class = "download-link", target = "_blank" })
