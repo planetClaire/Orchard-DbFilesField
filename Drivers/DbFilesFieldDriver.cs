@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using DbFilesField.Models;
 using DbFilesField.Services;
@@ -49,45 +52,46 @@ namespace DbFilesField.Drivers
             return ContentShape("Fields_DbFilesField_Edit", field.Name, () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: viewModel, Prefix: GetPrefix(field, part)));
         }
 
-        protected override DriverResult Editor(ContentPart part, Fields.DbFilesField field, IUpdateModel updater, dynamic shapeHelper)
-        {
+        protected override DriverResult Editor(ContentPart part, Fields.DbFilesField field, IUpdateModel updater, dynamic shapeHelper) {
             var viewModel = new DbFilesFieldEditViewModel();
-
             if (updater.TryUpdateModel(viewModel, GetPrefix(field, part), null, null)) {
-
-                // todo validate required
-                //if (settings.Required && string.IsNullOrEmpty(viewModel.Value)) {
-                //    updater.AddModelError(GetPrefix(field, part), T("{0} is required.", field.DisplayName));
-                //}
-                //else {
-                    try {
-                        var request = ((Controller) updater).Request;
-                        for (var i = 0; i < request.Files.Count; i++) {
-                            if (request.Files.GetKey(i).Equals("DbFiles-" + field.Name)) {
-                                var postedFile = request.Files[i];
-                                if (postedFile != null)
-                                {
-                                    var document = new byte[postedFile.ContentLength];
-                                    postedFile.InputStream.Read(document, 0, postedFile.ContentLength);
-                                    var record = new FileUploadRecord
-                                    {
-                                        FileData = document,
-                                        IdContent = part.ContentItem.Id,
-                                        FieldName = field.Name,
-                                        FileName = Path.GetFileName(postedFile.FileName),
-                                        ContentType = postedFile.ContentType
-                                    };
-                                    _fileUploadRepository.Create(record);
-                                }
-                            }
+                var request = ((Controller) updater).Request;
+                var settings = field.PartFieldDefinition.Settings.GetModel<DbFilesFieldSettings>();
+                var keyName = "DbFiles-" + field.Name;
+                var postedFiles = new List<HttpPostedFileBase>();
+                for (var i = 0; i < request.Files.Count; i++) {
+                    if (request.Files.GetKey(i).Equals(keyName)) {
+                        var postedFile = request.Files[i];
+                        if (postedFile != null && postedFile.InputStream.Length > 0) {
+                            postedFiles.Add(postedFile);
                         }
                     }
-                    catch (Exception ex){
-                        updater.AddModelError(GetPrefix(field, part), T("Failed to save {0} - {1}.", field.DisplayName, ex.Message));
+                }
+                if (settings.Required) {
+                    var existingFiles = _dbFilesService.GetFilesForField(field.Name, part.ContentItem.Id);
+                    if (!existingFiles.Any() && !postedFiles.Any()) {
+                        updater.AddModelError(GetPrefix(field, part), T("{0} is required.", field.DisplayName));
+                        return Editor(part, field, shapeHelper);
                     }
-                //}
+                }
+                try {
+                    foreach (var postedFile in postedFiles) {
+                        var document = new byte[postedFile.ContentLength];
+                        postedFile.InputStream.Read(document, 0, postedFile.ContentLength);
+                        var record = new FileUploadRecord {
+                            FileData = document,
+                            IdContent = part.ContentItem.Id,
+                            FieldName = field.Name,
+                            FileName = Path.GetFileName(postedFile.FileName),
+                            ContentType = postedFile.ContentType
+                        };
+                        _fileUploadRepository.Create(record);
+                    }
+                }
+                catch (Exception ex) {
+                    updater.AddModelError(GetPrefix(field, part), T("Failed to save {0} - {1}.", field.DisplayName, ex.Message));
+                }
             }
-
             return Editor(part, field, shapeHelper);
         }
 
