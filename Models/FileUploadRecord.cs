@@ -6,6 +6,7 @@ namespace DbFilesField.Models
     {
         public virtual int Id { get; set; }
         public virtual int IdContent { get; set; }
+        public string FieldName { get; set; }
         public virtual string FileName { get; set; }
         public virtual string ContentType { get; set; }
         [BinaryLengthMax]

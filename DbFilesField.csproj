@@ -89,9 +89,11 @@
     <Compile Include="Attributes\BinaryLengthMaxAttribute.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Drivers\DbFilesFieldDriver.cs" />
-    <Compile Include="Fields\DBFilesField.cs" />
+    <Compile Include="Fields\DbFilesField.cs" />
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\FileUploadRecord.cs" />
+    <Compile Include="Services\DbFilesService.cs" />
+    <Compile Include="Services\IDbFilesService.cs" />
     <Compile Include="Settings\DbFilesFieldEditorEvents.cs" />
     <Compile Include="Settings\DbFilesFieldSettings.cs" />
     <Compile Include="ViewModels\DbFilesFieldEditViewModel.cs" />

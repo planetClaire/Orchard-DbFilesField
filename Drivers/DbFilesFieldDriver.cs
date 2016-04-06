@@ -2,6 +2,7 @@
 using System.IO;
 using System.Web.Mvc;
 using DbFilesField.Models;
+using DbFilesField.Services;
 using DbFilesField.Settings;
 using DbFilesField.ViewModels;
 using Orchard.ContentManagement;
@@ -13,10 +14,13 @@ namespace DbFilesField.Drivers
 {
     public class DbFilesFieldDriver : ContentFieldDriver<Fields.DbFilesField> {
         private readonly IRepository<FileUploadRecord> _fileUploadRepository;
+        private readonly IDbFilesService _dbFilesService;
+
         private const string TemplateName = "Fields/DbFilesField.Edit";
 
-        public DbFilesFieldDriver(IRepository<FileUploadRecord> fileUploadRepository) {
+        public DbFilesFieldDriver(IRepository<FileUploadRecord> fileUploadRepository, IDbFilesService dbFilesService) {
             _fileUploadRepository = fileUploadRepository;
+            _dbFilesService = dbFilesService;
             T = NullLocalizer.Instance;
         }
 
@@ -26,36 +30,21 @@ namespace DbFilesField.Drivers
             return part.PartDefinition.Name + "." + field.Name;
         }
 
-        protected override DriverResult Display(ContentPart part, Fields.DbFilesField field, string displayType, dynamic shapeHelper)
-        {
-            var viewModel = new DbFilesFieldViewModel();
-            var record = _fileUploadRepository.Get(field.IdFileUpload);
-            if (record != null) {
-                viewModel.IdFileUpload = field.IdFileUpload;
-                viewModel.FileName = record.FileName;
-            }
-            return ContentShape("Fields_DbFilesField", field.Name, () => shapeHelper.Fields_DbFilesField(ViewModel: viewModel));
+        protected override DriverResult Display(ContentPart part, Fields.DbFilesField field, string displayType, dynamic shapeHelper) {
+            return ContentShape("Fields_DbFilesField", field.Name, () => shapeHelper.Fields_DbFilesField(ViewModel: _dbFilesService.GetFilesForField(field.Name, part.ContentItem.Id)));
         }
 
         protected override DriverResult Editor(ContentPart part, Fields.DbFilesField field, dynamic shapeHelper)
         {
             var settings = field.PartFieldDefinition.Settings.GetModel<DbFilesFieldSettings>();
 
-            var viewModel = new DbFilesFieldEditViewModel
-            {
+            var viewModel = new DbFilesFieldEditViewModel {
                 Name = field.Name,
                 Hint = settings.Hint,
                 IsRequired = settings.Required,
-                AllowMultiple = settings.AllowMultiple
+                AllowMultiple = settings.AllowMultiple,
+                DbFilesViewModel = _dbFilesService.GetFilesForField(field.Name, part.ContentItem.Id)
             };
-
-            var record = _fileUploadRepository.Get(field.IdFileUpload);
-            if (record != null) {
-                viewModel.DbFilesViewModel = new DbFilesFieldViewModel {
-                    IdFileUpload = field.IdFileUpload,
-                    FileName = record.FileName
-                };
-            }
 
             return ContentShape("Fields_DbFilesField_Edit", field.Name, () => shapeHelper.EditorTemplate(TemplateName: TemplateName, Model: viewModel, Prefix: GetPrefix(field, part)));
         }
@@ -72,20 +61,25 @@ namespace DbFilesField.Drivers
                 //}
                 //else {
                     try {
-                        var postedFile = ((Controller)updater).Request.Files["DbFiles-" + field.Name];
-                        if (postedFile != null) {
-                            var filename = Path.GetFileName(postedFile.FileName);
-                            var contentType = postedFile.ContentType;
-                            byte[] document = new byte[postedFile.ContentLength];
-                            postedFile.InputStream.Read(document, 0, postedFile.ContentLength);
-                            var record = new FileUploadRecord {
-                                FileData = document,
-                                IdContent = part.ContentItem.Id,
-                                FileName = filename,
-                                ContentType = contentType
-                            };
-                            _fileUploadRepository.Create(record);
-                            field.IdFileUpload = record.Id;
+                        var request = ((Controller) updater).Request;
+                        for (var i = 0; i < request.Files.Count; i++) {
+                            if (request.Files.GetKey(i).Equals("DbFiles-" + field.Name)) {
+                                var postedFile = request.Files[i];
+                                if (postedFile != null)
+                                {
+                                    var document = new byte[postedFile.ContentLength];
+                                    postedFile.InputStream.Read(document, 0, postedFile.ContentLength);
+                                    var record = new FileUploadRecord
+                                    {
+                                        FileData = document,
+                                        IdContent = part.ContentItem.Id,
+                                        FieldName = field.Name,
+                                        FileName = Path.GetFileName(postedFile.FileName),
+                                        ContentType = postedFile.ContentType
+                                    };
+                                    _fileUploadRepository.Create(record);
+                                }
+                            }
                         }
                     }
                     catch (Exception ex){

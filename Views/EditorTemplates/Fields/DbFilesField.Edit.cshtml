@@ -12,13 +12,15 @@
     <input type="file" name='@fieldName' @if (Model.IsRequired) {<text> class="required"</text>} @if (Model.AllowMultiple) {<text>multiple</text>}/>
 
     @*todo - allow delete*@
-    @if (Model.DbFilesViewModel.IdFileUpload != 0) {
+    @if (Model.DbFilesViewModel.Any()) {
         <h4>Existing attachments</h4>
         <table class="items">
-            <tr>
-                <td>@Html.ActionLink(Model.DbFilesViewModel.FileName, "Index", new { id = Model.DbFilesViewModel.IdFileUpload, controller = "Download", area = "DbFilesField" }, new { @class = "download-link", target = "_blank" })</td>
-                <td>@Html.ActionLink(T("Delete").ToString(), "Delete", new { id = Model.DbFilesViewModel.IdFileUpload, controller = "Admin", area = "DbFilesField" }, new { itemprop = "RemoveUrl UnsafeUrl" })</td>
-            </tr>
+            @foreach (var item in Model.DbFilesViewModel) {
+                <tr>
+                    <td>@Html.ActionLink(item.FileName, "Index", new { id = item.IdFileUpload, controller = "Download", area = "DbFilesField" }, new { @class = "download-link", target = "_blank" })</td>
+                    <td>@Html.ActionLink(T("Delete").ToString(), "Delete", new { id = item.IdFileUpload, controller = "Admin", area = "DbFilesField" }, new { itemprop = "RemoveUrl UnsafeUrl" })</td>
+                </tr>
+            }
         </table>
     }
 
