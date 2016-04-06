@@ -26,5 +26,15 @@ namespace DbFilesField.Services
             }
             return viewModel;
         }
+
+        public void DeleteFile(string id) {
+            int idInt;
+            if (int.TryParse(id, out idInt)) {
+                var file = _fileUploadRepository.Get(idInt);
+                if (file != null) {
+                    _fileUploadRepository.Delete(file);
+                }
+            }
+        }
     }
 }

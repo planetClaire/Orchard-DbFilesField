@@ -56,6 +56,12 @@ namespace DbFilesField.Drivers
         protected override DriverResult Editor(ContentPart part, Fields.DbFilesField field, IUpdateModel updater, dynamic shapeHelper) {
             var viewModel = new DbFilesFieldEditViewModel();
             if (updater.TryUpdateModel(viewModel, GetPrefix(field, part), null, null)) {
+                if (!string.IsNullOrEmpty(viewModel.DeleteIds)) {
+                    var idsToDelete = viewModel.DeleteIds.Split(',');
+                    foreach (var id in idsToDelete) {
+                        _dbFilesService.DeleteFile(id);
+                    }
+                }
                 var request = ((Controller) updater).Request;
                 var settings = field.PartFieldDefinition.Settings.GetModel<DbFilesFieldSettings>();
                 var keyName = "DbFiles-" + field.Name;

@@ -11,18 +11,19 @@
                             }>@Model.Name (maximum file size: @Model.MaxKb Kb)</label>
     <input type="file" name='@fieldName' @if (Model.IsRequired) {<text> class="required"</text>} @if (Model.AllowMultiple) {<text>multiple</text>}/>
 
-    @*todo - allow delete*@
     @if (Model.DbFilesViewModel.Any()) {
         <h4>Existing attachments</h4>
         <table class="items">
             @foreach (var item in Model.DbFilesViewModel) {
                 <tr>
-                    <td>@Html.ActionLink(item.FileName, "Index", new { id = item.IdFileUpload, controller = "Download", area = "DbFilesField" }, new { @class = "download-link", target = "_blank" })</td>
-                    <td>@Html.ActionLink(T("Delete").ToString(), "Delete", new { id = item.IdFileUpload, controller = "Admin", area = "DbFilesField" }, new { itemprop = "RemoveUrl UnsafeUrl" })</td>
+                    <td><a href='@Url.Action("Index", new {id = item.IdFileUpload, controller = "Download", area = "DbFilesField"})' class="download-link" data-id="@item.IdFileUpload" target="_blank">@item.FileName</a></td>
+                    <td><a data-id="@item.IdFileUpload" href="#" class="delete-link">Delete</a></td>
                 </tr>
             }
         </table>
     }
+
+    @Html.HiddenFor(m => Model.DeleteIds, new { @class = "delete-ids" })
 
 </fieldset>
 
@@ -33,6 +34,13 @@
     $('form')
 		.attr('enctype', 'multipart/form-data')
 		.attr('encoding', 'multipart/form-data');
+
+    $(".delete-link").click(function (event) {
+        $(".download-link[data-id=" + $(this).data('id') + "]").css("text-decoration", "line-through");
+        $(".delete-ids").val($(".delete-ids").val() + "," + $(this).data('id'));
+        alert("The file will be deleted when you save/publish");
+        event.preventDefault();
+    });
 //]]>
     </script>
 }
