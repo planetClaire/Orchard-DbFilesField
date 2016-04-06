@@ -34,7 +34,7 @@ namespace DbFilesField.Drivers
         }
 
         protected override DriverResult Display(ContentPart part, Fields.DbFilesField field, string displayType, dynamic shapeHelper) {
-            return ContentShape("Fields_DbFilesField", field.Name, () => shapeHelper.Fields_DbFilesField(ViewModel: _dbFilesService.GetFilesForField(field.Name, part.ContentItem.Id)));
+            return ContentShape("Fields_DbFilesField", field.Name, () => shapeHelper.Fields_DbFilesField(Field: field, ViewModel: _dbFilesService.GetFilesForField(field.Name, part.ContentItem.Id)));
         }
 
         protected override DriverResult Editor(ContentPart part, Fields.DbFilesField field, dynamic shapeHelper)
