@@ -46,6 +46,7 @@ namespace DbFilesField.Drivers
                 Hint = settings.Hint,
                 IsRequired = settings.Required,
                 AllowMultiple = settings.AllowMultiple,
+                MaxKb = settings.MaxKb,
                 DbFilesViewModel = _dbFilesService.GetFilesForField(field.Name, part.ContentItem.Id)
             };
 
@@ -76,16 +77,21 @@ namespace DbFilesField.Drivers
                 }
                 try {
                     foreach (var postedFile in postedFiles) {
-                        var document = new byte[postedFile.ContentLength];
-                        postedFile.InputStream.Read(document, 0, postedFile.ContentLength);
-                        var record = new FileUploadRecord {
-                            FileData = document,
-                            IdContent = part.ContentItem.Id,
-                            FieldName = field.Name,
-                            FileName = Path.GetFileName(postedFile.FileName),
-                            ContentType = postedFile.ContentType
-                        };
-                        _fileUploadRepository.Create(record);
+                        if (postedFile.ContentLength/1000 > settings.MaxKb) {
+                            updater.AddModelError(GetPrefix(field, part), T("{0} is too large.", postedFile.FileName));
+                        }
+                        else {
+                            var document = new byte[postedFile.ContentLength];
+                            postedFile.InputStream.Read(document, 0, postedFile.ContentLength);
+                            var record = new FileUploadRecord {
+                                FileData = document,
+                                IdContent = part.ContentItem.Id,
+                                FieldName = field.Name,
+                                FileName = Path.GetFileName(postedFile.FileName),
+                                ContentType = postedFile.ContentType
+                            };
+                            _fileUploadRepository.Create(record);
+                        }
                     }
                 }
                 catch (Exception ex) {

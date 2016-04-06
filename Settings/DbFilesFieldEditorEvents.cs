@@ -33,6 +33,7 @@ namespace DbFilesField.Settings
                 builder.WithSetting("DbFilesFieldSettings.Hint", model.Hint);
                 builder.WithSetting("DbFilesFieldSettings.Required", model.Required.ToString(CultureInfo.InvariantCulture));
                 builder.WithSetting("DbFilesFieldSettings.AllowMultiple", model.AllowMultiple.ToString(CultureInfo.InvariantCulture));
+                builder.WithSetting("DbFilesFieldSettings.MaxKb", model.MaxKb.ToString(CultureInfo.InvariantCulture));
 
                 yield return DefinitionTemplate(model);
             }

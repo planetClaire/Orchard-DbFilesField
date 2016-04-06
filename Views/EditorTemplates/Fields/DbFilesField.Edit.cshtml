@@ -8,7 +8,7 @@
 
     <label for='@fieldName' @if (Model.IsRequired) {
                                 <text> class="required" </text>
-                            }>@Model.Name</label>
+                            }>@Model.Name (maximum file size: @Model.MaxKb Kb)</label>
     <input type="file" name='@fieldName' @if (Model.IsRequired) {<text> class="required"</text>} @if (Model.AllowMultiple) {<text>multiple</text>}/>
 
     @*todo - allow delete*@

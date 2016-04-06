@@ -9,7 +9,14 @@
 
 <fieldset>
     @Html.CheckBoxFor(m => m.AllowMultiple) <label for="@Html.FieldIdFor(m => m.AllowMultiple)" class="forcheckbox">@T("Allow multiple files")</label>
-    <span class="hint">@T("Check to allow mutliple files.")</span>
+    <span class="hint">@T("Check to allow multiple files.")</span>
+</fieldset>
+
+<fieldset>
+    <label for="@Html.FieldIdFor(m => m.MaxKb)" class="forcheckbox">@T("Maximum file size in Kb")</label>
+    @Html.TextBoxFor(m => m.MaxKb)
+    @Html.ValidationMessageFor(m => m.MaxKb)
+    <span class="hint">@T("(recommended: 1000)")</span>
 </fieldset>
 
 <fieldset>

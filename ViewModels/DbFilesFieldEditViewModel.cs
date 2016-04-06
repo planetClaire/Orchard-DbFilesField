@@ -9,6 +9,7 @@ namespace DbFilesField.ViewModels {
         public string Value { get; set; }
         public bool AllowMultiple { get; set; }
         public List<DbFilesFieldViewModel> DbFilesViewModel { get; set; }
+        public int MaxKb { get; set; }
 
         public DbFilesFieldEditViewModel() {
             DbFilesViewModel = new List<DbFilesFieldViewModel> {new DbFilesFieldViewModel()};
