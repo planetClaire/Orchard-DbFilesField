@@ -31,7 +31,7 @@ namespace DbFilesField.Controllers
             }
 
             HttpContext.Response.AddHeader("Content-type", fileRecord.ContentType);
-            HttpContext.Response.AddHeader("Content-Disposition", "attachment; filename=" + fileRecord.FileName);
+            HttpContext.Response.AddHeader("Content-Disposition", string.Format("\"attachment; filename=\"{0}\"", fileRecord.FileName));
             HttpContext.Response.OutputStream.Write(fileRecord.FileData, 0, fileRecord.FileData.Length);
             HttpContext.Response.Flush();
             HttpContext.Response.End();
