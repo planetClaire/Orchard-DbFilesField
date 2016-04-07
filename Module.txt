@@ -4,9 +4,9 @@ Author: Zeta Tech
 Website: http://zeta.com.au
 Version: 1.0
 OrchardVersion: 1.10
-Description: A file upload field that saves files in the database and checks content permissions
+Description: A file upload field that saves files in the database, checks content permissions and optionally annotates PDFs with the current users email address
 Features:
     DbFilesField:
 		Name: DB Files Field
-        Description: A file upload field that saves files in the database and checks content permissions
+        Description: A file upload field that saves files in the database, checks content permissions and optionally annotates PDFs with the current users email address
 		Category: Fields
