@@ -9,5 +9,7 @@ namespace DbFilesField.Settings
         public bool AllowMultiple { get; set; }
         [Required]
         public int MaxKb { get; set; }
+        public bool AnnotateFile { get; set; }
+        public string AnnotateFormatString { get; set; }
     }
 }

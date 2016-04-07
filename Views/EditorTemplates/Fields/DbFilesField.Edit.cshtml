@@ -11,6 +11,10 @@
                             }>@Model.Name (maximum file size: @Model.MaxKb Kb)</label>
     <input type="file" name='@fieldName' @if (Model.IsRequired) {<text> class="required"</text>} @if (Model.AllowMultiple) {<text>multiple</text>}/>
 
+    @if (Model.AnnotateFile && !string.IsNullOrEmpty(Model.AnnotateFormatString)) {
+        <p>Pdf files will be annotated with "@string.Format(Model.AnnotateFormatString, "<current user email>")"</p>
+    }
+
     @if (Model.DbFilesViewModel.Any()) {
         <h4>Existing attachments</h4>
         <table class="items">

@@ -20,6 +20,17 @@
 </fieldset>
 
 <fieldset>
+    @Html.CheckBoxFor(m => m.AnnotateFile) <label for="@Html.FieldIdFor(m => m.AnnotateFile)" class="forcheckbox">@T("Annotate the first page of the pdf file with the current users\'s email address.")</label>
+    <span class="hint">@T("Only applies to pdfs. Annotate format string MUST be present")</span>
+</fieldset>
+
+<fieldset>
+        <label for="@Html.FieldIdFor(m => m.AnnotateFormatString)">@T("Annotate format string")</label>
+        @Html.TextBoxFor(m => m.AnnotateFormatString, new { @class = "large" })
+        <span class="hint">@T("eg: \"Licensed to {0}\"")</span>
+</fieldset>
+
+<fieldset>
     <div>
         <label for="@Html.FieldIdFor(m => m.Hint)">@T("Help text")</label>
         @Html.TextAreaFor(m => m.Hint, new {@class = "text medium", rows = "5"})

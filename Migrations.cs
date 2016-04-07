@@ -20,7 +20,9 @@ namespace DbFilesField
         public int UpdateFrom6() {
             SchemaBuilder.AlterTable("FileUploadRecord", table => table.AddColumn<string>("FieldName"));
 
-            return 7;
+            return 9;
         }
+
     }
+
 }

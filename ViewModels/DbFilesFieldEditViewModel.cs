@@ -11,6 +11,8 @@ namespace DbFilesField.ViewModels {
         public List<DbFilesFieldViewModel> DbFilesViewModel { get; set; }
         public int MaxKb { get; set; }
         public string DeleteIds { get; set; }
+        public bool AnnotateFile { get; set; }
+        public string AnnotateFormatString { get; set; }
 
         public DbFilesFieldEditViewModel() {
             DbFilesViewModel = new List<DbFilesFieldViewModel> {new DbFilesFieldViewModel()};

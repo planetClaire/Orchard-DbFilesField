@@ -47,6 +47,8 @@ namespace DbFilesField.Drivers
                 IsRequired = settings.Required,
                 AllowMultiple = settings.AllowMultiple,
                 MaxKb = settings.MaxKb,
+                AnnotateFile = settings.AnnotateFile,
+                AnnotateFormatString = settings.AnnotateFormatString,
                 DbFilesViewModel = _dbFilesService.GetFilesForField(field.Name, part.ContentItem.Id)
             };
 
