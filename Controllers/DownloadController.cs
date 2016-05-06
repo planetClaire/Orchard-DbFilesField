@@ -44,7 +44,7 @@ namespace DbFilesField.Controllers
                 return new HttpUnauthorizedResult();
             }
 
-            Response.AddHeader("Content-type", fileRecord.ContentType);
+            Response.AddHeader("Content-type", "application/x-download");
             Response.AddHeader("Content-Disposition", string.Format("\"attachment; filename=\"{0}\"", fileRecord.FileName));
 
             var fileContents = fileRecord.FileData;
