@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using Orchard.ContentManagement.MetaData;
+using Orchard.Core.Contents.Extensions;
 using Orchard.Data.Migration;
 
 namespace DbFilesField
@@ -23,6 +25,22 @@ namespace DbFilesField
             return 9;
         }
 
+        public int UpdateFrom9() {
+            ContentDefinitionManager.AlterPartDefinition("DBFilesFieldWidgetPart", part => part
+                .Attachable()
+                .WithField("DBFiles", field => field
+                    .OfType("DbFilesField")
+                ));
+
+            ContentDefinitionManager.AlterTypeDefinition("DBFilesFieldWidget", type => type
+                .WithPart("DBFilesFieldWidgetPart")
+                .WithPart("WidgetPart")
+                .WithPart("CommonPart")
+                .WithSetting("Stereotype", "Widget")
+                .Securable());
+
+            return 10;
+        }
     }
 
 }
