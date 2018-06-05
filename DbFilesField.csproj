@@ -122,6 +122,7 @@
     <Compile Include="Fields\DbFilesField.cs" />
     <Compile Include="Migrations.cs" />
     <Compile Include="Models\FileUploadRecord.cs" />
+    <Compile Include="Routes.cs" />
     <Compile Include="Services\DbFilesService.cs" />
     <Compile Include="Services\IDbFilesService.cs" />
     <Compile Include="Settings\DbFilesFieldEditorEvents.cs" />

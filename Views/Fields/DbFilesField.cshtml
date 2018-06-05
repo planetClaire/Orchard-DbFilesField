@@ -3,7 +3,7 @@
     @foreach (var fileUpload in Model.ViewModel)
     {
         <li>
-            @Html.ActionLink((string) T("Download {0}", fileUpload.FileName).ToString(), "Index", new {id = fileUpload.IdFileUpload, controller = "Download", area = "DbFilesField"}, new {@class = "download-link", target = "_blank"})
+            <a href='@Href(string.Format("/DBFilesField/Download/{0}?id={1}", fileUpload.FileName, fileUpload.IdFileUpload))'>Download @fileUpload.FileName</a>
         </li>
     }
 </ul>
